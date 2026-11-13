@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Bosh sahifa — o‘quv markazi",
+    "path": "assets/design-0.png",
+    "image": "assets/design-0.png"
+  },
+  {
+    "name": "Lug‘at va SRS",
+    "path": "assets/design-1.png",
+    "image": "assets/design-1.png"
+  },
+  {
+    "name": "Imlo klaviaturasi",
+    "path": "assets/design-2.png",
+    "image": "assets/design-2.png"
+  },
+  {
+    "name": "So‘zlarni tekshirish navbati",
+    "path": "assets/design-3.png",
+    "image": "assets/design-3.png"
+  },
+  {
+    "name": "Ko‘p so‘z importi",
+    "path": "assets/design-4.png",
+    "image": "assets/design-4.png"
+  },
+  {
+    "name": "Kurslar va CEFR",
+    "path": "assets/design-5.png",
+    "image": "assets/design-5.png"
+  },
+  {
+    "name": "O‘yinlar",
+    "path": "assets/design-6.png",
+    "image": "assets/design-6.png"
+  },
+  {
+    "name": "Reyting",
+    "path": "assets/design-7.png",
+    "image": "assets/design-7.png"
+  },
+  {
+    "name": "Admin boshqaruvi",
+    "path": "assets/design-8.png",
+    "image": "assets/design-8.png"
+  },
+  {
+    "name": "Telegram Mini App",
+    "path": "assets/design-9.png",
+    "image": "assets/design-9.png"
+  },
+  {
+    "name": "Yakuniy master prototip",
+    "path": "assets/design-10.png",
+    "image": "assets/design-10.png"
+  }
+]
