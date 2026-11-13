@@ -2,7 +2,7 @@
 
 Gamified English vocabulary learning for Uzbek speakers. Based on the project owner's Stitch references and working prototypes.
 
-## Current version: 0.1 — learning MVP
+## Current version: 0.1.1 — learning MVP
 
 - Responsive dark purple / cyan interface.
 - Uzbek on the front of the flashcard, English on the back.
@@ -13,6 +13,7 @@ Gamified English vocabulary learning for Uzbek speakers. Based on the project ow
 - Three introductory lessons with quizzes.
 - JSON backup export and restore.
 - Original Stitch screen reference gallery.
+- Standalone deck creation, spelling mistake retries and optional IPA, part-of-speech, translated example, synonym and collocation fields.
 
 Data is stored only in this browser's localStorage in v0.1. There is no account system or cross-device sync yet. AI generation, Telegram integration, teacher/admin management and global rankings are planned, not connected services.
 
