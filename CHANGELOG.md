@@ -1,5 +1,15 @@
 # Changes
 
+## 0.2.0
+
+- Replaced neon colors, mascot banner and decorative cards with a graphite study workspace.
+- Added coherent navigation icons, responsive menu with close and Escape support, and Uzbek calendar labels.
+- Added local speaking practice with topic selection, a timer, recording, playback and download. Microphone streams close on navigation; audio is not uploaded.
+- Import now previews new words and detects duplicates before saving.
+- Study progress resumes after refreshing the same tab.
+- Fixed empty-deck statistics and stale restore-confirmation controls.
+- The production service still uses browser-local practice data. Teacher accounts, groups and Telegram authentication remain separate backend work, not live features of this release.
+
 ## 0.1.1
 
 - Create a deck before adding its first word.
