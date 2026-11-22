@@ -1,0 +1,28 @@
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test behaviour and access controls
+        run: node --test tests/*.test.mjs
+      - name: Build the classroom Worker
+        run: node scripts/build-worker.mjs
+      - name: Prepare Cloudflare package
+        run: node scripts/prepare-cloudflare.mjs
+      - name: Check generated Worker syntax
+        run: node --check .sites-local/cloudflare/public/_worker.js
