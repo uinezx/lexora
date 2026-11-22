@@ -1,49 +1,68 @@
-# Lexora
+# Lexora Academy
 
-Gamified English vocabulary learning for Uzbek speakers. Based on the project owner's Stitch references and working prototypes.
+**English learning for Uzbek-speaking students and their teachers.**
 
-## Current version: 0.2.0 — redesigned practice workspace
+[Live platform](https://lexora-academy-4zo.pages.dev/) · [Telegram Mini App](https://t.me/lexora_academy_bot?startapp=lexora) · [Changelog](CHANGELOG.md)
 
-- Responsive graphite interface without neon effects; task-focused study desk.
-- Uzbek on the front of the flashcard, English on the back.
-- Decks, search, word creation, editing and deletion.
-- Bulk import of word / translation / optional example rows (semicolon, TSV, spaced dash or equals).
-- Simplified SM-2 scheduling with Again / Hard / Good / Easy. This implementation is **not FSRS**.
-- Spelling practice with immediate feedback, XP, streaks and activity statistics.
-- Three introductory lessons with quizzes.
-- JSON backup export and restore.
-- Original Stitch screen reference gallery.
-- Standalone deck creation, spelling mistake retries and optional IPA, part-of-speech, translated example, synonym and collocation fields.
-- Import preview with duplicate detection before confirmation.
-- Study session recovery after refresh in the same tab.
-- Local speaking practice: timed recording, playback and audio download. No server upload or automated band score.
+Built by **Kholhojayev Bekhruzbek ([uinezx](https://github.com/uinezx))**.
 
-Data is stored only in this browser's localStorage in v0.1. There is no account system or cross-device sync yet. AI generation, Telegram integration, teacher/admin management and global rankings are planned, not connected services.
+## Release 0.8.0
 
-## Run
+| Students | Teachers |
+| --- | --- |
+| Telegram registration and group-code joining | Multiple groups, dated lessons and decks |
+| Uzbek → English flashcards, then vocabulary and spelling tests | Bilingual word imports and reversible archives |
+| Lesson words unlock at a minimum **80%** score | Daily limits and explained redlist warnings |
+| Adaptive daily revision with four recall grades | Individual freeze, warning reset and catch-up schedules |
+| Assignments in the Mini App or bot chat | Assignment creation, written-answer review and editable AI drafts |
+| Independent language practice | Attendance and lesson results |
 
-Node.js 22 or newer; no package installation required.
+### Practice spaces
+
+- **Reading & Listening:** ten original starter exercises across A1–C1, level filters, answer explanations, timers and text scaling. Full Cambridge tests open at their external source.
+- **Speaking:** six original models with grammar/vocabulary notes, question-only mode, audio and local recording.
+- **Flashcards:** example audio, YouGlish context links, swipes and custom keyboard shortcuts.
+- **Watch:** YouTube URL plus a pasted transcript, with word-level context lookup.
+
+### Stack
+
+JavaScript · HTML · CSS · Node.js · Cloudflare Pages / Workers · D1 / SQLite · Telegram Bot API · Workers AI
+
+### Local development
+
+Use Node.js 24 or later for the full test suite and built-in SQLite fixtures.
 
 ```sh
-node server.mjs
+node scripts/build-worker.mjs
+node scripts/preview-classroom.mjs
 # Open http://127.0.0.1:4173
-node --test tests/engine.test.mjs
+node --test tests/*.test.mjs
 ```
 
-Static hosting serves the `dist` directory. `.openai/hosting.json` records the existing Sites project identity; do not create a replacement Site for later updates.
+The preview includes local QA identities; those routes are never deployed. Set `LEXORA_PREVIEW_PORT` for another port.
 
-## Planned releases
+### Deployment
 
-See [ROADMAP.md](ROADMAP.md) for the section-by-section product scope and open decisions.
+Run `node scripts/prepare-cloudflare.mjs` to prepare `.sites-local/cloudflare/public`. Configure `DB`, encrypted `TELEGRAM_BOT_TOKEN`, owner `ADMIN_TELEGRAM_ID` and optional `AI` bindings in hosting settings. Apply migrations once, in order. See [hosting instructions](hosting/README.md).
 
-1. v0.1: reviewable learning flow and design.
-2. v0.2: account sign-in, durable user-owned vocabulary and progress; migration from local backup.
-3. v0.3: server-side AI word processing with a review queue and quotas.
-4. v0.4: Telegram Mini App and opt-in reminders.
-5. v0.5: teacher / student groups, courses, games, rankings and admin controls.
+### Project map
 
-Each release should have separate validation and deployment. An open-source repository does not make user data public. Future server APIs must enforce ownership on every read and write.
+| Directory | Purpose |
+| --- | --- |
+| `dist/` | Frontend modules, styles and brand assets |
+| `worker/` | Classroom API, revision and AI exercise drafts |
+| `hosting/` | Telegram bot and Cloudflare entry |
+| `scripts/` | Build, packaging and preview |
+| `db/`, `drizzle/` | Schema and migrations |
+| `tests/` | Behaviour and security checks |
+| `server/` | Earlier Node prototype |
 
-## Source boundaries
+### Current boundaries
 
-Only application code and design references belong in the repository. User videos, Telegram screenshots, application forms, credentials and local study backups must not be committed.
+The scheduler is Anki-inspired, not FSRS. Audio uses device English text-to-speech. Speaking/Writing automated assessment, Google login, automatic subtitles and shared XP leaderboards are not connected. Practice answers, Watch transcripts and personal XP remain device-local; speaking recordings stay in the session unless downloaded. AI exercise drafts require teacher review, and real-provider conversion still needs acceptance testing.
+
+**Validation:** 68 automated tests passed for 0.8.0.
+
+Report reproducible bugs through [GitHub Issues](https://github.com/uinezx/lexora/issues). Keep tokens and student information out of reports and commits.
+
+---
