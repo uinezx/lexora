@@ -1,0 +1,62 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1794732835882,
+      "tag": "0000_medical_zaladane",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1794752552659,
+      "tag": "0001_early_prism",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1794752695014,
+      "tag": "0002_ordinary_titania",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1794897668688,
+      "tag": "0003_premium_ironclad",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1795200792141,
+      "tag": "0004_safe_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1795203272394,
+      "tag": "0005_groovy_vision",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1795204909768,
+      "tag": "0006_sticky_gravity",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1795205012508,
+      "tag": "0007_romantic_warlock",
+      "breakpoints": true
+    }
+  ]
+}
