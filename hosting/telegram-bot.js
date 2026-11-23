@@ -11,9 +11,30 @@ export async function telegramUpdate(update,env,origin){
  const reply=(text,reply_markup={remove_keyboard:true})=>({method:'sendMessage',chat_id:m.chat.id,text,reply_markup});
  const roles=()=>reply('Rolingizni tanlang:',{keyboard:[[{text:'O‘quvchi'},{text:'O‘qituvchi'}]],resize_keyboard:true,one_time_keyboard:true});
  const contact=()=>reply('Telefoningizni tasdiqlang. Bir raqam — bitta profil.',{keyboard:[[{text:'Raqamni ulashish',request_contact:true}]],resize_keyboard:true,one_time_keyboard:true});
- const open=(name,status)=>reply(`${name}, ${status==='pending'?'arizangiz admin tasdig‘ini kutmoqda.':'hisobingiz tayyor.'} Kabinetni ochishingiz mumkin.`,{inline_keyboard:[[{text:'Lexorani ochish',web_app:{url:origin}}]]});
+ const open=async(name,status)=>{
+  const link=await q("SELECT * FROM telegram_browser_links WHERE user_id=? AND status='pending' AND expires>? ORDER BY created DESC LIMIT 1",id,Date.now()).first();
+  if(link)return reply(`Brauzerdagi Lexora hisobiga kirishni tasdiqlaysizmi?\n\nKod: ${link.id.slice(0,8).toUpperCase()}\nFaqat o‘zingiz ochgan sayt shu kodni ko‘rsatsa tasdiqlang. Tasdiqdan keyin o‘sha brauzerga qayting.`,{keyboard:[[{text:'Kirishni tasdiqlash '+link.id.slice(0,8).toUpperCase()}],[{text:'/cancel'}]],resize_keyboard:true,one_time_keyboard:true});
+  return reply(`${name}, ${status==='pending'?'arizangiz admin tasdig‘ini kutmoqda.':'hisobingiz tayyor.'} Kabinetni ochishingiz mumkin.`,{inline_keyboard:[[{text:'Lexorani ochish',web_app:{url:origin}}]]});
+ };
  let account=await q('SELECT * FROM accounts WHERE id=?',id).first(),phone=await q('SELECT user_id FROM telegram_phones WHERE user_id=?',id).first();
  let state=await q('SELECT * FROM telegram_onboarding WHERE user_id=?',id).first();
+ const login=text.match(/^\/start(?:@\w+)? login_([a-f0-9]{32})$/);
+ if(login){
+  const linked=await q("UPDATE telegram_browser_links SET user_id=? WHERE id=? AND status='pending' AND expires>? AND (user_id IS NULL OR user_id=?)",id,login[1],Date.now(),id).run();
+  if((linked.meta?.changes??linked.changes)!==1)return reply('Bu kirish havolasi eskirgan yoki ishlatilgan. Saytda qayta boshlang.');
+ }
+ if(text==='/cancel'){
+  await q("DELETE FROM telegram_browser_links WHERE user_id=? AND status='pending'",id).run();
+  await q('DELETE FROM telegram_onboarding WHERE user_id=?',id).run();
+  return reply('Brauzerga kirish bekor qilindi. Davom etish uchun /start yuboring.');
+ }
+ const confirmation=text.match(/^Kirishni tasdiqlash ([A-F0-9]{8})$/);
+ if(confirmation&&account&&phone){
+  const link=await q("SELECT * FROM telegram_browser_links WHERE user_id=? AND status='pending' AND expires>? AND substr(id,1,8)=? ORDER BY created DESC LIMIT 1",id,Date.now(),confirmation[1].toLowerCase()).first();
+  if(!link)return reply('Tasdiqlash kodi eskirgan. Saytda kirishni qayta boshlang.');
+  await q("UPDATE telegram_browser_links SET status='approved' WHERE id=? AND user_id=? AND status='pending'",link.id,id).run();
+  return reply('Kirish tasdiqlandi. Avval ochgan brauzeringizga qayting — hisobingiz o‘sha yerda ochiladi.',{inline_keyboard:[[{text:'Telegram ichida ochish',web_app:{url:origin}}]]});
+ }
  const save=async(step,role=state?.role||'',name=state?.name||'')=>{await q('INSERT INTO telegram_onboarding(user_id,step,role,name,updated) VALUES(?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET step=excluded.step,role=excluded.role,name=excluded.name,updated=excluded.updated',id,step,role,name,Date.now()).run();state={step,role,name};};
  if(account&&phone){
   const call=(path,body)=>classroom(new Request(origin+'/api/classroom'+path,{method:body===undefined?'GET':'POST',headers:{origin,'content-type':'application/json','oai-authenticated-user-id':id},body:body===undefined?undefined:JSON.stringify(body)}),env);

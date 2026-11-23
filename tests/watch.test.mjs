@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {parseCaptions,youtubeId} from '../dist/watch.js';
+test('watch parses real timed SRT and VTT without interpreting markup',()=>{const cues=parseCaptions('WEBVTT\n\n00:00:01.200 --> 00:00:04.800\nHello <b>world</b>.\n\n00:00:05,000 --> 00:00:07,000\nNext sentence.');assert.deepEqual(cues,[{start:1.2,end:4.8,text:'Hello world.'},{start:5,end:7,text:'Next sentence.'}]);assert.equal(parseCaptions('00:05 Hello there.')[0].start,5);assert.equal(parseCaptions('plain text')[0].start,null);assert.equal(youtubeId('https://evil.test/watch?v=abcdefghijk'),null);});
+
+import {annotatedText} from '../dist/speaking-guide.js';
+test('speaking source offsets never mark an unrelated repeated fragment',()=>{assert.equal(annotatedText({text:'season and a decent bunch',annotations:[{start:11,text:'a',type:'lx'}]}),'season and <mark class="guide-vocab" title="Foydali ibora">a</mark> decent bunch');assert.equal(annotatedText({text:'safe <text>',annotations:[]}),'safe &lt;text&gt;');});

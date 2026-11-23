@@ -32,3 +32,9 @@ Accounts, groups, lessons, tests, revision schedules, assignment submissions and
 ## Current limits
 
 Google login and English-only vocabulary generation are not connected. AI exercise drafts require teacher review; real-provider file conversion still needs acceptance testing. Listening uses device English text-to-speech. No paid plan is enabled by this code, but provider quotas and account configuration still apply.
+
+## Browser sign-in (v0.9)
+
+Apply only the new `0008_mighty_freak.sql` migration to an existing v0.8 database before deploying v0.9. A browser creates a ten-minute pairing request with a separate HttpOnly proof cookie. The ordinary Telegram `?start=login_…` link completes existing phone onboarding if needed, then asks for explicit confirmation of the matching eight-character code. Only the originating browser can exchange approval once for a session. This uses the existing Telegram account, not Google OAuth. Sessions last 24 hours.
+
+The new original Academic Reading practice test contains three passages and 40 questions, explanations and paragraph evidence navigation. Speaking contains 28 original question/answer models covering A1–C1. No Cambridge or third-party answer bank has been copied.

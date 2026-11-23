@@ -66,3 +66,11 @@ The scheduler is Anki-inspired, not FSRS. Audio uses device English text-to-spee
 Report reproducible bugs through [GitHub Issues](https://github.com/uinezx/lexora/issues). Keep tokens and student information out of reports and commits.
 
 ---
+
+### v0.9 additions
+
+Browser login pairs with the existing Telegram account through an explicit short-lived bot confirmation. Reading adds an original three-passage, 40-question practice test with evidence navigation. Speaking includes 28 original model answers with grammar notes, vocabulary, search and audio. These are practice materials, not calibrated IELTS band predictions.
+
+### Speaking guide v0.10
+
+212 topics from the user-authorized Jakhongir Isomiddinov guide: Part 1 (57), Part 2 (68), P2 Masters (19), Part 3 (68). Imported via visible artifact content; 654 numbered questions and 2249 text paragraphs. Grammar labels, model variants, preparation advice and examiner notes are retained. Source: https://claude.ai/artifact/3oAhhcbXcHSE2vr2QaLmkQ . The user confirmed republication permission in chat. Textual content is preserved; original inline lexical colour annotations and undo/redo annotation tools are not yet reproduced.

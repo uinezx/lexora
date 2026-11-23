@@ -1,3 +1,14 @@
+## 0.11.0 — 2026-11-23
+
+- Teacher vocabulary and lesson preview, with no changes to learner scores or SRS.
+- Group owner can remove membership while retaining accounts and past submissions.
+- Simple vocabulary start, collapsible word browser, weekly group competition.
+- Server-derived XP: distinct daily review milestones and first successful lesson tests; no per-click XP.
+- Back navigation, persistent light/dark theme, compact review and mobile layout.
+- Watch: video without mandatory transcript, local file playback, SRT/VTT captions, timestamp jump, speed, pronunciation and personal bookmarks. Contextual word meanings use the existing AI binding with a 30-per-day account cap. Automatic subtitle retrieval remains unavailable.
+- Removed external Engnovate shortcuts from native reading/listening libraries.
+- Speaking questions expand independently; seven grammar explanations. All 212 topics now carry 10,630 exact original grammar/vocabulary highlight spans. Visible guide branding adapted to Lexora.
+
 # Changes
 
 ## 0.8.0

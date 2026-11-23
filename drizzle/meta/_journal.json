@@ -57,6 +57,13 @@
       "when": 1795205012508,
       "tag": "0007_romantic_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1795364121213,
+      "tag": "0008_mighty_freak",
+      "breakpoints": true
     }
   ]
 }

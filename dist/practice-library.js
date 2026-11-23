@@ -1,3 +1,5 @@
+import {readingExams} from './reading-exams.js';
+import {extraSpeakingTopics} from './speaking-library.js';
 // Original Lexora practice material. CEFR labels are editorial guidance, not certificates.
 export const levels=['A1','A2','B1','B2','C1'];
 const q=(prompt,options,answer,why)=>({prompt,options,answer,why});
@@ -24,3 +26,6 @@ export const speakingTopics=[
 {level:'B2',type:'IELTS Part 2 · A useful skill',seconds:120,title:'Describe a skill you would like to learn.',points:['What the skill is','Why you want to learn it','How you would start','How it could help you'],answer:'I would like to learn public speaking. Although I can explain ideas to friends, I sometimes lose my train of thought in front of a larger audience. I would start by joining a small discussion group and asking for specific feedback. If I became more confident, I could contribute more actively at university and at work.',grammar:'Although — qarama-qarshilik; would/could — taxmin; if + past, could — second conditional.',vocab:'lose my train of thought — fikr izini yo‘qotish; specific feedback — aniq fikr-mulohaza',mark:'lose my train of thought'},
 {level:'C1',type:'IELTS Part 3 · Learning',seconds:90,title:'How has technology changed the way people learn?',points:['State your view','Consider a limitation','Support your point'],answer:'Technology has broadened access to learning, but access alone does not guarantee understanding. Learners can revisit explanations at their own pace, which is particularly valuable when prior knowledge varies. Nevertheless, without opportunities to apply ideas and receive feedback, an extensive content library may create an illusion of progress rather than lasting competence.',grammar:'Present perfect; which bilan relative clause; without + noun; rather than bilan taqqoslash.',vocab:'at their own pace — o‘z sur’atida; prior knowledge — avvalgi bilim; lasting competence — barqaror ko‘nikma',mark:'an illusion of progress'}
 ];
+
+readingSets.push(...readingExams);
+speakingTopics.push(...extraSpeakingTopics);

@@ -51,6 +51,27 @@ export default {async fetch(request,env){const path=new URL(request.url).pathnam
    return json(result);
   }
   const cookie=(request.headers.get('cookie')||'').split(';').map(s=>s.trim()).find(s=>s.startsWith('__Host-lexora='))?.slice(14)||'',hash=await digest(cookie);
+  if(path==='/api/auth/browser/start'&&request.method==='POST'){
+   await readBody(request);
+   const now=Date.now(),id=hex(crypto.getRandomValues(new Uint8Array(16))),proof=hex(crypto.getRandomValues(new Uint8Array(32)));
+   await env.DB.prepare('DELETE FROM telegram_browser_links WHERE expires<?').bind(now).run();
+   await env.DB.prepare('INSERT INTO telegram_browser_links(id,browser_hash,expires,created) VALUES(?,?,?,?)').bind(id,await digest(proof),now+600000,now).run();
+   return json({id,code:id.slice(0,8).toUpperCase(),expires:now+600000,url:'https://t.me/lexora_academy_bot?start=login_'+id},200,{'set-cookie':`__Host-lexora-pair=${proof}; Secure; HttpOnly; SameSite=Lax; Path=/; Max-Age=600`});
+  }
+  if(path==='/api/auth/browser/status'&&request.method==='POST'){
+   const body=await readBody(request),proof=(request.headers.get('cookie')||'').split(';').map(s=>s.trim()).find(s=>s.startsWith('__Host-lexora-pair='))?.slice('__Host-lexora-pair='.length)||'';
+   if(!/^[a-f0-9]{32}$/.test(body.id||'')||!proof)throw new APIError(401,'Kirishni shu brauzerdan boshlang.');
+   const link=await env.DB.prepare('SELECT * FROM telegram_browser_links WHERE id=? AND browser_hash=? AND expires>?').bind(body.id,await digest(proof),Date.now()).first();
+   if(!link||link.status==='consumed')throw new APIError(410,'Kirish muddati tugagan. Qaytadan boshlang.');
+   if(link.status!=='approved')return json({status:'pending'});
+   const verified=await env.DB.prepare('SELECT a.id FROM accounts a JOIN telegram_phones p ON a.id=p.user_id WHERE a.id=?').bind(link.user_id).first();
+   if(!verified)throw new APIError(403,'Avval botda ro‘yxatdan o‘ting.');
+   const claim=await env.DB.prepare("UPDATE telegram_browser_links SET status='consumed' WHERE id=? AND status='approved'").bind(link.id).run();
+   if((claim.meta?.changes??claim.changes)!==1)throw new APIError(410,'Kirish allaqachon ishlatilgan.');
+   const token=hex(crypto.getRandomValues(new Uint8Array(32)));
+   await env.DB.prepare('INSERT INTO telegram_sessions VALUES(?,?,?)').bind(await digest(token),link.user_id,Date.now()+86400000).run();
+   return json({status:'approved'},200,{'set-cookie':`__Host-lexora=${token}; Secure; HttpOnly; SameSite=Lax; Path=/; Max-Age=86400`});
+  }
   if(path==='/api/auth/telegram'&&request.method==='POST'){
    const body=await readBody(request),identity=await verifyMiniApp(body.initData,env.TELEGRAM_BOT_TOKEN);
    if(await env.DB.prepare('SELECT 1 FROM telegram_exchanges WHERE signature=?').bind(identity.signature).first())throw new APIError(401,'Bu kirish ishlatilgan. Botni qayta oching.');
