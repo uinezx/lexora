@@ -1,3 +1,10 @@
+## 0.13.0 — 2026-11-24
+
+- Reworked the public landing around a local animated word orbit, a full-screen typographic statement and scroll-driven vocabulary/speaking/context demonstrations.
+- Working flashcard reveal, clickable grammar explanations and an explicitly illustrative phrase-save interaction; existing Telegram account pairing preserved.
+- Manual chapters on mobile and reduced-motion layouts, persistent animation pause for the browser session, visibility-aware drawing and light/dark themes.
+- Visual/reference study in docs/landing-reference-study-2026-11-24.md. Browser QA at 320, 390, 768, 1024 and 1440 pixels; 82 existing tests pass. No database migration.
+
 ## 0.12.0 — 2026-11-24
 
 - Public landing page with a working flashcard preview, light/dark themes and the existing Telegram account pairing flow.
