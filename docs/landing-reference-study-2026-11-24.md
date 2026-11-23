@@ -25,3 +25,11 @@ Reviewed chronological contact sheets spanning each supplied clip; these are vis
 | Telegram capture | Bot and vocabulary file workflow | Existing Telegram pairing is preserved. Personal messages and reference footage are not published. |
 
 Implemented beats: one animated hero scene; one contrasting type statement; one scroll-driven learning sequence. Phones use direct chapter controls. Reduced motion freezes the hero and makes chapters manually selectable. Animation is paused offscreen or when the page is hidden. No video files, external motion libraries or new image downloads are shipped.
+
+## Verification
+
+- Browser widths: 320, 390, 768, 1024, 1440. No horizontal document overflow; primary action visible in the first viewport. Light and dark inspected.
+- Exercised flashcard reveal, chapter selection, sticky scroll state, grammar explanation, illustrative save, theme and animation pause. No browser console errors observed.
+- Existing automated suite: 82 passing. Impeccable mechanical detector: no findings.
+- Copy lint: 0 failures, 2 warnings. Short Uzbek headings/sentences are retained as deliberately compact interface copy; the English-language fragment/rhythm heuristic is not used to lengthen them artificially.
+- The browser-only testing policy precludes the skill's separate headless browser gate. No GATE PASS is claimed. Reduced-motion behavior is implemented and code-reviewed, but OS preference emulation was not available in the browser tool. Physical-device GPU and keyboard testing remain outside this visual pass.
