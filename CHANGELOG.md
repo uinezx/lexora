@@ -1,3 +1,10 @@
+## 0.12.0 — 2026-11-24
+
+- Public landing page with a working flashcard preview, light/dark themes and the existing Telegram account pairing flow.
+- Written vocabulary tests focus the answer field immediately and silently reject keyboard replacements when the browser identifies them. Ordinary typing and IME input remain supported; some mobile keyboards do not identify suggestions separately.
+- Leaving an active test page marks the current unanswered question wrong once. Returning restores the feedback; keyboard focus changes do not incur a penalty.
+- 82 automated tests passed, including input correction, focus, page exit and existing weekly competition scoring checks. Real mobile keyboard behavior still needs device testing.
+
 ## 0.11.0 — 2026-11-23
 
 - Teacher vocabulary and lesson preview, with no changes to learner scores or SRS.
