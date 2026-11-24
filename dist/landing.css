@@ -14,4 +14,37 @@ html[data-theme=dark] .lx-landing{--lx-bg:#111a1a;--lx-ink:#eeeede;--lx-muted:#b
 @media(max-width:1100px){.lx-stage-shell{height:560px}}
 @media(max-width:759px){.lx-hero{height:auto;min-height:calc(100svh - 80px)}.lx-hero-scene{height:320px;top:105px}.lx-journey-stage[data-stage] .lx-stage-shell{height:530px}.lx-scene-controls{position:static;justify-content:space-between;gap:10px}}
 @media(max-width:360px){.lx-journey-stage[data-stage] .lx-stage-shell{height:570px}}
-@media(prefers-reduced-motion:reduce){.lx-landing *, .lx-landing *:before,.lx-landing *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.lx-journey{height:auto;padding:90px 0}.lx-journey-sticky{position:relative;top:auto;min-height:0;height:auto}.lx-stage-shell{transform:none!important}.lx-motion{display:none}.lx-chapter p{max-height:none;opacity:1;margin-top:13px}.lx-hero h1,.lx-hero-copy,.lx-hero-scene{opacity:1;filter:none;transform:none}}
+/* One continuous, reversible scroll scene. Native scroll remains in control. */
+.lx-hero-story{height:240svh;position:relative;background:var(--lx-bg)}
+.lx-hero-story .lx-hero{position:sticky;top:0;height:calc(100svh - 100px);min-height:610px;max-height:none;overflow:clip}
+.lx-hero-story .lx-hero-scene{inset:0 0 110px;height:auto;animation:lx-scene-arrive 1.4s cubic-bezier(.16,1,.3,1) both}
+.lx-hero-story .lx-scene-core{left:72%;top:51%;width:18%;opacity:var(--lx-core-opacity,1)}
+.lx-hero-story .lx-hero h1{animation:none;opacity:var(--lx-hero-title,1);will-change:opacity}
+.lx-hero-story .lx-hero h1>span{animation:lx-arrive .9s cubic-bezier(.16,1,.3,1) both}
+.lx-hero-story .lx-hero h1>em{animation:lx-arrive 1s .1s cubic-bezier(.16,1,.3,1) both}
+.lx-hero-copy>p:first-child{opacity:var(--lx-hero-copy,1)}
+.lx-scroll-sentence{position:absolute;inset:0 0 110px;z-index:3;pointer-events:none;color:var(--lx-ink);opacity:var(--lx-sentence-opacity,0)}
+.lx-scroll-sentence h2{position:absolute;left:0;right:0;top:calc(var(--lx-sentence-y,300px) - .7em);text-align:center;font-size:var(--lx-sentence-size,70px);line-height:1.4;font-weight:600;letter-spacing:0}
+.lx-scroll-sentence h2>span{display:block;white-space:nowrap}
+.lx-scroll-sentence mark{color:var(--lx-accent);background:none}
+.lx-scroll-sentence>p{position:absolute;top:77%;width:100%;text-align:center;font-size:14px;letter-spacing:.01em;color:var(--lx-muted)}
+.lx-scroll-rail{position:absolute;right:22px;top:22%;height:42%;width:1px;background:var(--lx-line);z-index:3}
+.lx-scroll-rail i{display:block;height:100%;width:2px;transform:scaleY(var(--lx-scroll-progress,0));transform-origin:top;background:var(--lx-accent)}
+.lx-hero-baseline{gap:20px;align-items:center}
+.lx-hero-steps{display:flex;align-items:center;gap:12px;font-size:9px;letter-spacing:.08em}
+.lx-hero-steps i{height:1px;width:35px;background:var(--lx-line)}
+.lx-hero-steps span{transition:color .25s}
+[data-hero-beat=orbit] .lx-hero-steps span:first-child,[data-hero-beat=unfold] .lx-hero-steps span:nth-of-type(2),[data-hero-beat=sentence] .lx-hero-steps span:last-child{color:var(--lx-accent)}
+.lx-paused .lx-hero-scene,.lx-paused .lx-hero h1>span,.lx-paused .lx-hero h1>em{animation-play-state:paused}
+.lx-hero-wipe{position:absolute;inset:0;pointer-events:none;background:#db7956;clip-path:circle(var(--lx-wipe-radius,0%) at 50% 45%)}
+[data-hero-tone=warm] .lx-hero-story{background:#db7956}
+[data-hero-tone=warm] .lx-hero{--lx-ink:#193028;--lx-accent:#613523;--lx-muted:#193028;--lx-line:#ad6346;--lx-paper:#fff1da}
+[data-hero-tone=warm] .lx-hero .lx-primary{background:#193028;color:#fff1da}
+.lx-statement{background:#db7956;color:#192b25}
+#public-landing .lx-scroll-sentence h2{color:var(--lx-ink)}
+#public-landing .lx-scroll-sentence>p,#public-landing p.lx-smallprint{color:var(--lx-muted)}
+#public-landing .lx-statement h2,#public-landing .lx-statement p{color:#192b25}
+@media(max-width:1100px) and (min-width:760px){.lx-hero-story .lx-hero{height:calc(100svh - 90px)}}
+@media(max-width:759px){.lx-hero-story{height:225svh}.lx-hero-story .lx-hero{height:calc(100svh - 80px);min-height:740px;padding-top:14px}.lx-hero-story .lx-hero-content{min-height:0;flex:1}.lx-hero-story .lx-hero-scene{inset:0 0 210px}.lx-hero-story .lx-scene-core{left:50%;top:47%;width:25%}.lx-hero-story .lx-hero-bottom{margin-top:auto;padding-bottom:18px}.lx-hero-story .lx-scroll-sentence{bottom:210px}.lx-scroll-sentence>p{font-size:11px;top:76%}.lx-scroll-rail{right:10px;height:30%;top:28%}.lx-hero-steps{display:none}.lx-hero-story .lx-hero h1{font-size:clamp(49px,10.8vw,79px)}.lx-hero-story .lx-hero-copy>p:first-child{font-size:12px}}
+@media(max-height:740px) and (min-width:760px){.lx-hero-story .lx-hero h1{font-size:75px}.lx-hero-story .lx-hero-bottom{padding-bottom:25px}.lx-hero-story .lx-hero-copy>p:first-child{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.lx-landing *, .lx-landing *:before,.lx-landing *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.lx-hero-story{height:auto}.lx-hero-story .lx-hero{position:relative}.lx-scroll-sentence,.lx-scroll-rail,.lx-hero-wipe{display:none}.lx-hero-story .lx-hero h1,.lx-hero-story .lx-scene-core,.lx-hero-copy>p:first-child{opacity:1}.lx-journey{height:auto;padding:90px 0}.lx-journey-sticky{position:relative;top:auto;min-height:0;height:auto}.lx-stage-shell{transform:none!important}.lx-motion{display:none}.lx-chapter p{max-height:none;opacity:1;margin-top:13px}.lx-hero h1,.lx-hero-copy,.lx-hero-scene{opacity:1;filter:none;transform:none}}

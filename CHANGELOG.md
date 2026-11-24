@@ -1,3 +1,9 @@
+## 0.14.0 — 2026-11-24
+
+- Scroll now opens and rotates the hero word orbit, assembles six words into a readable sentence, then floods the scene with the next section's coral background. Native scrolling reverses the entire sequence.
+- Preserved the primary action, pause control, light/dark themes and reduced-motion fallback. No new dependencies or database migration.
+- Browser checks at 320×780, 390×844, 768×1024 and 1440×900; 82 automated tests pass.
+
 ## 0.13.0 — 2026-11-24
 
 - Reworked the public landing around a local animated word orbit, a full-screen typographic statement and scroll-driven vocabulary/speaking/context demonstrations.

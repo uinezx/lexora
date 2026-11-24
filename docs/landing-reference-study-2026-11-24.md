@@ -28,6 +28,14 @@ Implemented beats: one animated hero scene; one contrasting type statement; one 
 
 ## Verification
 
+### v0.14 follow-up
+
+The user's follow-up asks for the initial orbit itself to respond to scrolling. The coffee sequence and shipping-object sequence inform one continuous transformation: orbit opens, six tokens assemble into “I remember / the words I use.”, then an expanding coral circle carries the scene into the next section. Scroll remains native and reversible. The sentence is real DOM text when revealed; pause freezes the scene, reduced motion removes the sticky sequence, and offscreen/hidden canvases stop drawing.
+
+Checked forward/reverse scrolling, explore-button progression and pause/resume in the browser. Checked 320×780, 390×844, 768×1024 and 1440×900 with no horizontal document overflow and primary action visible. Inspected light/dark initial states and the coral finale. Corrected a global dark-theme text-color override and the inter-section background seam. JavaScript syntax checks and all 82 existing automated tests pass. The standalone Impeccable CLI was unavailable in this follow-up; no new mechanical detector result is claimed. Physical-device GPU testing and OS reduced-motion emulation remain unverified.
+
+### v0.13 verification
+
 - Browser widths: 320, 390, 768, 1024, 1440. No horizontal document overflow; primary action visible in the first viewport. Light and dark inspected.
 - Exercised flashcard reveal, chapter selection, sticky scroll state, grammar explanation, illustrative save, theme and animation pause. No browser console errors observed.
 - Existing automated suite: 82 passing. Impeccable mechanical detector: no findings.
