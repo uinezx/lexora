@@ -10,7 +10,7 @@ export async function telegramUpdate(update,env,origin){
  const id='tg:'+m.from.id,db=env.DB,q=(sql,...a)=>db.prepare(sql).bind(...a),text=(m.text||'').trim();
  const reply=(text,reply_markup={remove_keyboard:true})=>({method:'sendMessage',chat_id:m.chat.id,text,reply_markup});
  const roles=()=>reply('Rolingizni tanlang:',{keyboard:[[{text:'O‘quvchi'},{text:'O‘qituvchi'}]],resize_keyboard:true,one_time_keyboard:true});
- const contact=()=>reply('Telefoningizni tasdiqlang. Bir raqam — bitta profil.',{keyboard:[[{text:'Raqamni ulashish',request_contact:true}]],resize_keyboard:true,one_time_keyboard:true});
+ const contact=()=>reply('Lexoraga xush kelibsiz!\n\nIngliz tilini lug‘at, speaking va videolar bilan mashq qiling.\n\nBoshlash uchun quyidagi tugma orqali o‘zingizning telefon raqamingizni tasdiqlang. Keyin rolingizni tanlaysiz. O‘quvchi bo‘lsangiz, ustozingiz bergan 5 xonali guruh kodi kerak bo‘ladi.\n\nYordam: /help',{keyboard:[[{text:'Raqamni ulashish',request_contact:true}]],resize_keyboard:true,one_time_keyboard:true});
  const open=async(name,status)=>{
   const link=await q("SELECT * FROM telegram_browser_links WHERE user_id=? AND status='pending' AND expires>? ORDER BY created DESC LIMIT 1",id,Date.now()).first();
   if(link)return reply(`Brauzerdagi Lexora hisobiga kirishni tasdiqlaysizmi?\n\nKod: ${link.id.slice(0,8).toUpperCase()}\nFaqat o‘zingiz ochgan sayt shu kodni ko‘rsatsa tasdiqlang. Tasdiqdan keyin o‘sha brauzerga qayting.`,{keyboard:[[{text:'Kirishni tasdiqlash '+link.id.slice(0,8).toUpperCase()}],[{text:'/cancel'}]],resize_keyboard:true,one_time_keyboard:true});
@@ -18,15 +18,18 @@ export async function telegramUpdate(update,env,origin){
  };
  let account=await q('SELECT * FROM accounts WHERE id=?',id).first(),phone=await q('SELECT user_id FROM telegram_phones WHERE user_id=?',id).first();
  let state=await q('SELECT * FROM telegram_onboarding WHERE user_id=?',id).first();
+ if(/^\/help(?:@\w+)?$/.test(text))return reply('Lexora — foydalanish yo‘riqnomasi\n\n/start — boshlash yoki hisobingizga qaytish\n/open — o‘quv kabinetini ochish\n/tasks — ustozingiz bergan vazifalar\n/cancel — joriy jarayonni bekor qilish\n\nYangi o‘quvchi: telefoningizni tasdiqlang, rolingizni tanlang, ism-familiyangizni va guruh kodini kiriting. Guruh kodini ustozingizdan oling. O‘qituvchi hisobi administrator tasdig‘idan keyin faollashadi.\n\nBrauzerdan kirishda bot va sayt ko‘rsatgan kod bir xil ekanini tekshiring.\n\nGuruh yoki hisob bo‘yicha savol bo‘lsa, ustozingizga murojaat qiling.',{inline_keyboard:[[{text:'Saytni ko‘rish',url:origin}]]});
+ if(/^\/open(?:@\w+)?$/.test(text))return account&&phone?open(account.name,account.status):reply('Kabinetni ochish uchun avval /start orqali ro‘yxatdan o‘ting.',{inline_keyboard:[[{text:'Lexora sayti',url:origin}]]});
+ if(/^\/(tasks|vazifalar)(?:@\w+)?$/.test(text)&&account?.role==='teacher')return reply('Vazifalarni o‘qituvchi kabinetida yarating va guruhingizga bering.',{inline_keyboard:[[{text:'O‘qituvchi kabineti',web_app:{url:origin}}]]});
  const login=text.match(/^\/start(?:@\w+)? login_([a-f0-9]{32})$/);
  if(login){
   const linked=await q("UPDATE telegram_browser_links SET user_id=? WHERE id=? AND status='pending' AND expires>? AND (user_id IS NULL OR user_id=?)",id,login[1],Date.now(),id).run();
   if((linked.meta?.changes??linked.changes)!==1)return reply('Bu kirish havolasi eskirgan yoki ishlatilgan. Saytda qayta boshlang.');
  }
- if(text==='/cancel'){
+ if(/^\/cancel(?:@\w+)?$/.test(text)){
   await q("DELETE FROM telegram_browser_links WHERE user_id=? AND status='pending'",id).run();
   await q('DELETE FROM telegram_onboarding WHERE user_id=?',id).run();
-  return reply('Brauzerga kirish bekor qilindi. Davom etish uchun /start yuboring.');
+  return reply('Joriy jarayon bekor qilindi. Hisobingiz va oldingi natijalaringiz saqlandi. Davom etish uchun /start yuboring.');
  }
  const confirmation=text.match(/^Kirishni tasdiqlash ([A-F0-9]{8})$/);
  if(confirmation&&account&&phone){

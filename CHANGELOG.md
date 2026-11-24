@@ -1,3 +1,9 @@
+## 0.15.0 — 2026-11-24
+
+- Adopted the folded-L identity in forest green, cream and coral: theme-aware outlined wordmarks, favicon, classroom branding and Telegram avatar.
+- Added bot help and cabinet commands, clearer onboarding and cancellation that retains existing accounts and results.
+- Fixed, versioned server-side Telegram identity setup applies the public name, descriptions, private-chat commands, Mini App menu and avatar without exposing the deployment secret.
+
 ## 0.14.0 — 2026-11-24
 
 - Scroll now opens and rotates the hero word orbit, assembles six words into a readable sentence, then floods the scene with the next section's coral background. Native scrolling reverses the entire sequence.

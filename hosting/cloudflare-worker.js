@@ -17,6 +17,42 @@ export async function verifyMiniApp(raw,token,now=Math.floor(Date.now()/1000)){
 const json=(value,status=200,headers={})=>Response.json(value,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff',...headers}});
 async function readBody(request){if(request.headers.get('origin')!==new URL(request.url).origin)throw new APIError(403,'So‘rov manbasi noto‘g‘ri.');if(!request.headers.get('content-type')?.startsWith('application/json'))throw new APIError(415,'JSON kerak.');const raw=await request.text();if(raw.length>20000)throw new APIError(413,'So‘rov juda katta.');try{return JSON.parse(raw);}catch{throw new APIError(400,'Ma’lumot formati noto‘g‘ri.');}}
 const botOrigin='https://lexora-academy-4zo.pages.dev';
+// Fixed, versioned identity bootstrap. No caller can supply a token, destination,
+// text or photo. The existing encrypted deployment secret stays server-side.
+export async function ensureBotProfile(env,send=fetch){
+ const key='identity-v015';
+ if(!env.TELEGRAM_BOT_TOKEN)return {ok:false};
+ const saved=await env.DB.prepare('SELECT status,updated FROM telegram_bot_config WHERE id=?').bind(key).first();
+ if(saved?.status==='ready')return {ok:true};
+ if(saved&&Date.now()-saved.updated<60000)return {ok:false};
+ const now=Date.now(),claim=await env.DB.prepare("INSERT INTO telegram_bot_config(id,status,updated) VALUES(?,'setting',?) ON CONFLICT(id) DO UPDATE SET status='setting',updated=excluded.updated WHERE status!='ready' AND updated<?").bind(key,now,now-60000).run();
+ if(!claim.meta?.changes&&claim.changes!==1)return {ok:false};
+ let step='getMe';
+ const call=async(method,body)=>{
+  step=method;
+  const result=await(await send('https://api.telegram.org/bot'+env.TELEGRAM_BOT_TOKEN+'/'+method,{method:'POST',...(body instanceof FormData?{body}:{headers:{'content-type':'application/json'},body:JSON.stringify(body||{})}),signal:AbortSignal.timeout(12000)})).json();
+  if(!result.ok)throw Error('Bot setup failed');return result.result;
+ };
+ try{
+  const me=await call('getMe');if(me.username!=='lexora_academy_bot')throw Error('Unexpected bot');
+  const short='Ingliz tilini har kuni mashq qiling. Lug‘at, speaking, videolar va ustozingizning vazifalari — bitta hisobda.';
+  const description='Lexora — ingliz tilini amalda o‘rganish maydoni.\n\n• So‘zlarni eslab qoling va takrorlang.\n• Speaking mavzulari bilan mashq qiling.\n• Video orqali iboralarni kontekstda o‘rganing.\n• Ustozingiz bergan vazifalarni bajaring.\n\nBoshlash uchun /start bosing. O‘quvchilar guruh kodini ustozidan oladi.';
+  for(const language_code of ['','uz']){
+   await call('setMyName',{name:'Lexora | Ingliz tili',language_code});
+   await call('setMyShortDescription',{short_description:short,language_code});
+   await call('setMyDescription',{description,language_code});
+   await call('setMyCommands',{scope:{type:'all_private_chats'},language_code,commands:[{command:'start',description:'Boshlash yoki hisobga qaytish'},{command:'open',description:'Lexora kabinetini ochish'},{command:'tasks',description:'Ustoz bergan vazifalar'},{command:'help',description:'Yordam va foydalanish yo‘riqnomasi'},{command:'cancel',description:'Joriy jarayonni bekor qilish'}]});
+  }
+  await call('setChatMenuButton',{menu_button:{type:'web_app',text:'Lexorani ochish',web_app:{url:botOrigin}}});
+  step='photo';const photo=await env.ASSETS.fetch(new Request(botOrigin+'/assets/logo-bot.jpg'));
+  if(!photo.ok||!photo.headers.get('content-type')?.startsWith('image/jpeg'))throw Error('Avatar unavailable');
+  const form=new FormData();form.set('photo',JSON.stringify({type:'static',photo:'attach://avatar'}));form.set('avatar',await photo.blob(),'lexora.jpg');
+  await call('setMyProfilePhoto',form);
+  await env.DB.prepare('UPDATE telegram_bot_config SET status=?,updated=? WHERE id=?').bind('ready',Date.now(),key).run();return {ok:true};
+ }catch{
+  await env.DB.prepare('UPDATE telegram_bot_config SET status=?,updated=? WHERE id=?').bind('failed:'+step,Date.now(),key).run();return {ok:false};
+ }
+}
 export async function ensureBotWebhook(env,send=fetch){
  if(!env.TELEGRAM_BOT_TOKEN)return {ok:false};
  const saved=await env.DB.prepare('SELECT status,updated FROM telegram_bot_config WHERE id=?').bind('webhook-v1').first();
@@ -38,6 +74,10 @@ export default {async fetch(request,env){const path=new URL(request.url).pathnam
   if(!path.startsWith('/api/'))return env.ASSETS.fetch(request);
   if(!env.DB)throw new APIError(503,'Ma’lumotlar ombori ulanmagan.');
   if(path==='/api/classroom/me'&&request.method==='GET'&&new URL(request.url).origin===botOrigin)await ensureBotWebhook(env);
+  if(path==='/api/bot/branding'&&request.method==='GET'&&new URL(request.url).origin===botOrigin){
+   await ensureBotProfile(env);const config=await env.DB.prepare('SELECT status,updated FROM telegram_bot_config WHERE id=?').bind('identity-v015').first();
+   return json({configured:config?.status==='ready',status:config?.status||'unconfigured'});
+  }
   if(path==='/api/bot/webhook'&&request.method==='POST'){
    if(!env.TELEGRAM_BOT_TOKEN||request.headers.get('x-telegram-bot-api-secret-token')!==await botSecret(env.TELEGRAM_BOT_TOKEN))throw new APIError(403,'Webhook tasdiqlanmadi.');
    const raw=await request.text();if(raw.length>65536)throw new APIError(413,'Update too large');
